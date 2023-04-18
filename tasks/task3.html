@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Задача 3</h1>
+    <p>
+      Морський бій. Випадковим чином на двовимірному полі розміром 6*6
+      розташовується 5 кораблів. Користувач стріляє вказуючи координати. Гра
+      продовжується поки не потоплено усі кораблі або у користувача не
+      закінчаться снаряди.
+    </p>
+
+    <script>
+      // Формуємо поле гри
+      // ===============Формуємо двомірний масив==================
+      // генерування рандомного числа
+      function getRandomNumber() {
+        return Math.floor(Math.random() * 6)
+      }
+
+      //функція генерування одного одновимірного масиву (одного рядка)
+      function getRandomArray() {
+        const arr = new Array(6).fill(0)
+        return arr
+      }
+
+      // функція генерування двовимірного масиву (двовимірної таблиці даних)
+      function getRandomTable() {
+        const table = []
+        for (let rowIndex = 0; rowIndex < 6; rowIndex++) {
+          const randomRow = getRandomArray()
+          table.push(randomRow)
+        }
+        return table
+      }
+
+      //функція шукає порожню клітинку і записує туди 1(ставить корабель)
+      function getFreeCell(tableField, shipsNumber) {
+        let rowShipIndex
+        let columnShipIndex
+        for (let i = 0; i < shipsNumber; i++) {
+          do {
+            rowShipIndex = getRandomNumber()
+            columnShipIndex = getRandomNumber()
+          } while (tableField[rowShipIndex][columnShipIndex] === 1)
+          tableField[rowShipIndex][columnShipIndex] = 1
+        }
+        return tableField
+      }
+
+      // Гра користувача
+      function gameUser(gameField, shipsNumber, numberAttempts) {
+        do {
+          const userStrikePositionRow = parseInt(
+            prompt(`Введіть номер рядка (0 - 5)?`)
+          )
+
+          const userStrikePositionColumn = parseInt(
+            prompt(`Введіть номер стовпця (0 - 5)?`)
+          )
+
+          if (
+            gameField[userStrikePositionRow][userStrikePositionColumn] === 1
+          ) {
+            shipsNumber--
+            alert(
+              `Влучив!Коробель потоплено! Залишилось ${shipsNumber} кораблів`
+            )
+            gameField[userStrikePositionRow][userStrikePositionColumn] = 0
+          } else alert("Промазав!")
+          numberAttempts--
+          alert(`Залишилось ${numberAttempts} спроб`)
+        } while (shipsNumber > 0 && numberAttempts > 0)
+
+        alert("Гра закінчилися!")
+      }
+
+      //Вводимо елементи масиву
+      // По умові задачі на полі розташовано 5 кораблів
+      const shipsNumber = 5
+      const numberAttempts = parseInt(prompt("Введіть кількість снарядів"))
+
+      //Знаходимо результат
+      // Викликаємо функцію для генерування двомірного масиву
+      const tableField = getRandomTable()
+      // Викликаємо функцію для рандомного розташування кораблів в таблиці
+      const gameField = getFreeCell(tableField, shipsNumber)
+      console.table(gameField)
+      // Викликаємо функцію для гри користувача
+      gameUser(gameField, shipsNumber, numberAttempts)
+    </script>
+  </body>
+</html>

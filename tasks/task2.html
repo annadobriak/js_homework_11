@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Задача 2</h1>
+    <p>Дано інформацію про прибуток К магазинів протягом тижня. Знайти :</p>
+    <ol>
+      <li>1)загальний прибуток кожного масиву за тиждень;</li>
+      <li>
+        2)загальний прибуток усіх магазинів по дням (загальний прибуток усіх
+        магазинів за понеділок, за вівторок, і т.д.);
+      </li>
+      <li>3)загальний прибуток за робочі дні</li>
+      <li>4)загальний прибуток за вихідні дні</li>
+      <li>5)максимальний прибуток за середу</li>
+      <li>
+        6)сформувати загальний список (одновимірний масив) зі значенням, які що
+        більші за 200
+      </li>
+      <li>7)відсортувати кожен тиждень за зростанням</li>
+      <li>
+        8)відсортувати тижні (рядки) за спаданням максимального елементи у цьому
+        тижні (рядку), тобто при порівнянні рядків потрібно порівнювати
+        максимальні елементи у кожному з цих рядків
+      </li>
+      <li>
+        9)упорядкувати тижні (рядки) за спаданням суми елементів у рядку (тобто
+        при порівнянні двох рядків треба знайти суму кожного з рядків і
+        порівнювати ці суми, на основі цих сум буде зрозуміло, який з елементів
+        повинен іти раніше).
+      </li>
+    </ol>
+
+    <script>
+      // let tableRandomElements = [
+      //   [23, 23, 273, 523, 103, 2, 923],
+      //   [5, 293, 525, 23, 23, 231, 323],
+      //   [293, 23, 123, 783, 155, 23, 23],
+      // ]
+
+      // ===============Формуємо двомірний масив==================
+      // генерування рандомного числа
+      function getRandomNumber(minValue, maxValue) {
+        return minValue + Math.floor(Math.random() * (maxValue - minValue + 1))
+      }
+
+      //функція генерування одного одновимірного масиву (одного рядка)
+      function generateRandomArray(arrayLength, minValue, maxValue) {
+        const arr = []
+        for (let rowIndex = 0; rowIndex < arrayLength; rowIndex++) {
+          const randNum = getRandomNumber(minValue, maxValue)
+          arr.push(randNum)
+        }
+        return arr
+      }
+      // функція генерування двовимірного масиву (двовимірної таблиці даних)
+      function generateRandomTable(
+        rowsNumber,
+        columnsNumber,
+        minValue,
+        maxValue
+      ) {
+        const table = []
+        for (let rowIndex = 0; rowIndex < rowsNumber; rowIndex++) {
+          const randomRow = generateRandomArray(
+            columnsNumber,
+            minValue,
+            maxValue
+          )
+          table.push(randomRow)
+        }
+        return table
+      }
+
+      // запитуємо у користувача кількість магазинів,
+      // мінімальне та максимальне значення доходів
+      const rowsNumber = parseInt(prompt("Введіть кількість магазинів", "0"))
+      const columnsNumber = parseInt(
+        prompt("скільки днів на тиждень магазин працює? ", "0")
+      )
+      const minValue = parseInt(
+        prompt("Введіть мінімальний прибуток за день", "0")
+      )
+      const maxValue = parseInt(
+        prompt("Введіть максимальний прибуток за день", "0")
+      )
+
+      // викликаємо функцію для генерування двомірного масиву
+      const tableRandomElements = generateRandomTable(
+        rowsNumber,
+        columnsNumber,
+        minValue,
+        maxValue
+      )
+
+      // ========================Розв"язок задач========================
+      //1) загальний прибуток кожного масиву за тиждень;
+      for (let row = 0; row < tableRandomElements.length; row++) {
+        let totalStoreProfit = 0
+        for (
+          let column = 0;
+          column < tableRandomElements[row].length;
+          column++
+        ) {
+          totalStoreProfit += tableRandomElements[row][column]
+        }
+        document.write(
+          `Загальний прибуток ${
+            row + 1
+          } магазину за тиждень = ${totalStoreProfit} <br>`
+        )
+      }
+
+      //2)загальний прибуток усіх магазинів по дням (загальний прибуток усіх
+      // магазинів за понеділок, за вівторок, і т.д.);
+      for (let num = 0; num < 7; num++) {
+        let totalProfitStoresByDay = 0
+        for (let row = 0; row < tableRandomElements.length; row++) {
+          totalProfitStoresByDay += tableRandomElements[row][num]
+        }
+        document.write(
+          `Загальний прибуток усіх магазинів за ${
+            num + 1
+          }й день тижня = ${totalProfitStoresByDay}<br>`
+        )
+      }
+
+      // 3)загальний прибуток за робочі дні
+      function getIncomeSpecifiedDays(
+        tableRandomElements,
+        startElement,
+        endElement
+      ) {
+        let incomeSpecifiedDays = 0
+        for (let row = 0; row < tableRandomElements.length; row++) {
+          for (let column = startElement; column <= endElement; column++)
+            incomeSpecifiedDays += tableRandomElements[row][column]
+        }
+        return incomeSpecifiedDays
+      }
+
+      let totalProfitWorkingDays = getIncomeSpecifiedDays(
+        tableRandomElements,
+        0,
+        4
+      )
+      document.write(
+        `Загальний прибуток за робочі дні = ${totalProfitWorkingDays}<br>`
+      )
+
+      // 4)загальний прибуток за вихідні дні
+      let totalWeekendProfit = getIncomeSpecifiedDays(tableRandomElements, 5, 6)
+      document.write(
+        `Загальний прибуток за вихідні дні = ${totalWeekendProfit}<br>`
+      )
+
+      // 5)максимальний прибуток за середу
+      let maxIncomeForWednesday = 0
+      for (let i = 1; i <= tableRandomElements.length; i++) {
+        if (tableRandomElements[i - 1][2] > maxIncomeForWednesday)
+          maxIncomeForWednesday = tableRandomElements[i - 1][2]
+      }
+      document.write(
+        `Максимальний прибуток за середу = ${maxIncomeForWednesday}<br>`
+      )
+      // 6)сформувати загальний список (одновимірний масив) зі значенням,
+      //що більші за 200
+      function getArrayIncomeGreaterThan200(tableRandomElements) {
+        let arrayIncomeGreaterThan200 = []
+        for (row of tableRandomElements) {
+          for (element of row) {
+            if (element > 200) arrayIncomeGreaterThan200.push(element)
+          }
+        }
+
+        return arrayIncomeGreaterThan200
+      }
+
+      const arrayElementsGreaterThan200 =
+        getArrayIncomeGreaterThan200(tableRandomElements)
+      document.write(
+        `Одномірний масив доходів магазинів, що більші за 200 - ${arrayElementsGreaterThan200}<br>`
+      )
+
+      // 7)відсортувати кожен тиждень за зростанням
+      function sortsEachRowAscendingOrder(matrCopy2) {
+        for (row of matrCopy2) {
+          row.sort((el1, el2) => el1 - el2)
+        }
+        return matrCopy2
+      }
+
+      // Формуємо копію двовимірного масиву
+      const matrCopy2 = JSON.parse(JSON.stringify(tableRandomElements))
+      // Викликаємо функцію sortsEachRowAscendingOrde
+      const sortedMatrAscendingOrder = sortsEachRowAscendingOrder(matrCopy2)
+      console.table(sortedMatrAscendingOrder)
+
+      // 8)відсортувати тижні (рядки) за спаданням максимального елементи у цьому
+      // тижні (рядку), тобто при порівнянні рядків потрібно порівнювати
+      // максимальні елементи у кожному з цих рядків
+
+      // формуємо масив із максимальних значень кожного з рядків матриці
+      let maxRowsElements = tableRandomElements.map((row) => Math.max(...row))
+
+      // функція сортування вибором
+      // сортує масив з максимальними значеннями і відповідно ряди двовимірного масиву
+      function sortSelectByMaxItemDescending(arrMax, tableRandomElements) {
+        const preLastIndex = arrMax.length - 1
+        for (let i = 0; i < preLastIndex; i++) {
+          let currentMaxIndex = i
+          for (let j = i + 1; j < arrMax.length; j++) {
+            if (arrMax[j] > arrMax[currentMaxIndex]) currentMaxIndex = j
+          }
+          if (i !== currentMaxIndex) {
+            // обмін елементів у масиві з максимальними значеннями
+            let tmp = arrMax[i]
+            arrMax[i] = arrMax[currentMaxIndex]
+            arrMax[currentMaxIndex] = tmp
+            // обмін рядків у двовимірному масиві
+            tmp = tableRandomElements[i]
+            tableRandomElements[i] = tableRandomElements[currentMaxIndex]
+            tableRandomElements[currentMaxIndex] = tmp
+          }
+        }
+        return tableRandomElements
+      }
+      // Формуємо копію двовимірного масиву
+      const matrCopy = JSON.parse(JSON.stringify(tableRandomElements))
+      // Викликаємо функцію
+      const sortedMatr = sortSelectByMaxItemDescending(
+        maxRowsElements,
+        matrCopy
+      )
+      console.table(sortedMatr)
+      // ========================Умова задачі========================
+      // упорядкувати тижні (рядки) за спаданням суми елементів у рядку (тобто
+      // при порівнянні двох рядків треба знайти суму кожного з рядків і
+      // порівнювати ці суми, на основі цих сум буде зрозуміло, який з елементів
+      // повинен іти раніше).
+
+      // Формуємо масив із суми елементів кожного рядка матриці
+      let arrSumElementsRow = tableRandomElements.map((row) =>
+        row.reduce((prevRes, element) => prevRes + element)
+      )
+      // Формуємо копію двовимірного масиву
+      const matrCopy1 = JSON.parse(JSON.stringify(tableRandomElements))
+      // Викликаємо функцію sortSelectByMaxItemDescending
+      const sortedMatrBySumElements = sortSelectByMaxItemDescending(
+        arrSumElementsRow,
+        matrCopy1
+      )
+      console.table(sortedMatrBySumElements)
+    </script>
+  </body>
+</html>

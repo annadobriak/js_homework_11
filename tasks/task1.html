@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Задача 1</h1>
+    <p>Знайти суми елементів у вказаній області</p>
+    <ol>
+      <li>
+        <img src="../img/example_1.jpg" alt="Приклад" />
+      </li>
+      <li>
+        <img src="../img/example_2.jpg" alt="Приклад" />
+      </li>
+      <li>
+        <img src="../img/example_3.jpg" alt="Приклад" />
+      </li>
+      <li>
+        <img src="../img/example_4.jpg" alt="Приклад" />
+      </li>
+      <li>Суму парних рядків</li>
+      <li>Суму непарних стовпців</li>
+      <li>У парних рядках – непарні стовпці, у непарних – парні.</li>
+    </ol>
+
+    <script>
+      // ===============Формуємо двомірний масив==================
+      // генерування рандомного числа
+      function getRandomNumber(minValue, maxValue) {
+        return minValue + Math.floor(Math.random() * (maxValue - minValue + 1))
+      }
+
+      //функція генерування одного одновимірного масиву (одного рядка)
+      function generateRandomArray(arrayLength, minValue, maxValue) {
+        const arr = []
+        for (let rowIndex = 0; rowIndex < arrayLength; rowIndex++) {
+          const randNum = getRandomNumber(minValue, maxValue)
+          arr.push(randNum)
+        }
+        return arr
+      }
+      // функція генерування двовимірного масиву (двовимірної таблиці даних)
+      function generateRandomTable(
+        rowsNumber,
+        columnsNumber,
+        minValue,
+        maxValue
+      ) {
+        const table = []
+        for (let rowIndex = 0; rowIndex < rowsNumber; rowIndex++) {
+          const randomRow = generateRandomArray(
+            columnsNumber,
+            minValue,
+            maxValue
+          )
+          table.push(randomRow)
+        }
+        return table
+      }
+
+      // запитуємо у користувача кількість рядків та стовпців,
+      // мінімальне та максимальне значення
+      const rowsNumber = parseInt(
+        prompt("Введіть кількість рядків в масиві", "0")
+      )
+      const columnsNumber = parseInt(
+        prompt("Введіть кількість стовпців в масиві", "0")
+      )
+      const minValue = parseInt(prompt("Введіть мінімальне значення", "0"))
+      const maxValue = parseInt(prompt("Введіть максимальне значення", "0"))
+
+      // викликаємо функцію для генерування двомірного масиву
+      const tableRandomElements = generateRandomTable(
+        rowsNumber,
+        columnsNumber,
+        minValue,
+        maxValue
+      )
+
+      // сума елементів у вказаній області (верхній лівий квадрат)
+      let sumUpperLeftSquare = 0
+      let numberMidleRow = Math.floor(tableRandomElements.length / 2)
+      for (let rowIndex = 0; rowIndex < numberMidleRow; rowIndex++) {
+        let numberMidleColumn = Math.floor(
+          tableRandomElements[rowIndex].length / 2
+        )
+        for (let colIndex = 0; colIndex < numberMidleColumn; colIndex++) {
+          sumUpperLeftSquare += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(
+        `Сума елементів у верхньому лівому квадраті - ${sumUpperLeftSquare}<br>`
+      )
+
+      // сума елементів у вказаній області (верхній правий квадрат)
+      let sumUpperRightSquare = 0
+      for (let rowIndex = 0; rowIndex < numberMidleRow; rowIndex++) {
+        let numberMidleColumn = Math.floor(
+          tableRandomElements[rowIndex].length / 2
+        )
+        for (
+          let colIndex = numberMidleColumn;
+          colIndex < tableRandomElements[rowIndex].length;
+          colIndex++
+        ) {
+          sumUpperRightSquare += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(
+        `Сума елементів у верхньому правому квадраті - ${sumUpperRightSquare} <br>`
+      )
+
+      // сума елементів у вказаній області (нижній лівий квадрат)
+      let sumLowerLeftSquare = 0
+      for (
+        let rowIndex = numberMidleRow;
+        rowIndex < tableRandomElements.length;
+        rowIndex++
+      ) {
+        let numberMidleColumn = Math.floor(
+          tableRandomElements[rowIndex].length / 2
+        )
+        for (let colIndex = 0; colIndex < numberMidleColumn; colIndex++) {
+          sumLowerLeftSquare += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(
+        `Сума елементів у нижньому лівому квадраті - ${sumLowerLeftSquare} <br>`
+      )
+
+      // сума елементів у вказаній області (нижній правий квадрат)
+      let sumLowerRightSquare = 0
+      for (
+        let rowIndex = numberMidleRow;
+        rowIndex < tableRandomElements.length;
+        rowIndex++
+      ) {
+        let numberMidleColumn = Math.floor(
+          tableRandomElements[rowIndex].length / 2
+        )
+        for (
+          let colIndex = numberMidleColumn;
+          colIndex < tableRandomElements[rowIndex].length;
+          colIndex++
+        ) {
+          sumLowerRightSquare += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(
+        `Сума елементів у нижньому правому квадраті - ${sumLowerRightSquare}<br>`
+      )
+
+      // Сума парних рядків------------------------
+      let sumEvenRows = 0
+      for (
+        let rowIndex = 0;
+        rowIndex < tableRandomElements.length;
+        rowIndex += 2
+      ) {
+        for (
+          let colIndex = 0;
+          colIndex < tableRandomElements[rowIndex].length;
+          colIndex++
+        ) {
+          sumEvenRows += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(`Сума елементів парних рядків - ${sumEvenRows}<br>`)
+
+      // Сума непарних рядків-----------------------
+      let sumOddRows = 0
+      for (
+        let rowIndex = 1;
+        rowIndex < tableRandomElements.length;
+        rowIndex += 2
+      ) {
+        for (
+          let colIndex = 0;
+          colIndex < tableRandomElements[rowIndex].length;
+          colIndex++
+        ) {
+          sumOddRows += tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(`Сума елементів непарних рядків - ${sumOddRows} <br>`)
+
+      // У парних рядках – непарні стовпці, у непарних – парні.
+      let sumElementsCheckerboardOrder = 0
+      for (
+        let rowIndex = 0;
+        rowIndex < tableRandomElements.length;
+        rowIndex++
+      ) {
+        let starColIndex
+        if (rowIndex % 2 === 0) starColIndex = 1
+        else starColIndex = 0
+
+        for (
+          let colIndex = starColIndex;
+          colIndex < tableRandomElements[rowIndex].length;
+          colIndex += 2
+        ) {
+          sumElementsCheckerboardOrder +=
+            tableRandomElements[rowIndex][colIndex]
+        }
+      }
+      document.write(
+        `Сума елементів: у парних рядках – непарні стовпці, у непарних – парні - ${sumElementsCheckerboardOrder} <br>`
+      )
+    </script>
+  </body>
+</html>
